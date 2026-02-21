@@ -18,6 +18,7 @@ from checks.base import (
     CheckResult,
     Status,
     find_adapter_subkeys,
+    ps_json,
     reg_hklm,
     run_cmd,
     run_powershell,
@@ -45,6 +46,8 @@ _VIRTUAL_KEYWORDS = frozenset(
     ]
 )
 
+_NIC_LABEL_BY_GUID: dict[str, str] | None = None
+
 
 def _is_virtual(name: str) -> bool:
     low = name.lower()
@@ -58,14 +61,57 @@ def _physical_nics() -> list[tuple[str, str]]:
     ]
 
 
+def _normalize_guid(value: str) -> str:
+    return value.strip().strip("{}").lower()
+
+
+def _nic_labels_by_guid() -> dict[str, str]:
+    global _NIC_LABEL_BY_GUID
+    if _NIC_LABEL_BY_GUID is not None:
+        return _NIC_LABEL_BY_GUID
+
+    mapping: dict[str, str] = {}
+    rows = ps_json(
+        "Get-NetAdapter -IncludeHidden -ErrorAction SilentlyContinue "
+        "| Select-Object InterfaceGuid,Name,InterfaceDescription"
+    )
+
+    if isinstance(rows, dict):
+        rows = [rows]
+    if isinstance(rows, list):
+        for row in rows:
+            if not isinstance(row, dict):
+                continue
+            guid = row.get("InterfaceGuid")
+            name = str(row.get("Name") or "").strip()
+            desc = str(row.get("InterfaceDescription") or "").strip()
+            if not isinstance(guid, str) or not guid.strip():
+                continue
+            key = _normalize_guid(guid)
+            if desc and name and desc.lower() != name.lower():
+                mapping[key] = f"{name} ({desc})"
+            else:
+                mapping[key] = name or desc
+
+    _NIC_LABEL_BY_GUID = mapping
+    return mapping
+
+
 def _nic_name_by_guid(interface_guid: str) -> str | None:
     """Return NIC display name for a TCP/IP interface GUID, if known."""
-    target = interface_guid.strip("{}").lower()
+    target = _normalize_guid(interface_guid)
+
+    # Prefer live adapter mapping for reliable interface names.
+    label = _nic_labels_by_guid().get(target)
+    if label:
+        return label
+
+    # Registry fallback.
     for desc, path in find_adapter_subkeys(NIC_CLASS_GUID):
         cfg_id = reg_hklm(path, "NetCfgInstanceId")
         if not isinstance(cfg_id, str):
             continue
-        if cfg_id.strip("{}").lower() == target:
+        if _normalize_guid(cfg_id) == target:
             return desc
     return None
 
@@ -99,6 +145,7 @@ __all__ = [
     "CheckResult",
     "Status",
     "reg_hklm",
+    "ps_json",
     "run_cmd",
     "run_powershell",
     "find_adapter_subkeys",

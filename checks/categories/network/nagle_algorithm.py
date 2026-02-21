@@ -17,7 +17,7 @@ def check_nagle_algorithm() -> CheckResult:
         nic_name = _nic_name_by_guid(guid)
         if nic_name and _is_virtual(nic_name):
             continue
-        label = nic_name or (guid[:8] + "...")
+        label = nic_name or (guid.strip("{}")[:8] + "...")
 
         no_delay = reg_hklm(path, "TCPNoDelay")
         ack_freq = reg_hklm(path, "TcpAckFrequency")

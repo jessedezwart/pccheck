@@ -5,6 +5,33 @@ from checks.base import CheckResult
 from ._helpers import *
 
 
+def _parse_sample_rate_from_device_format(blob: bytes | bytearray) -> int | None:
+    """Parse nSamplesPerSec from PKEY_AudioEngine_DeviceFormat.
+
+    Seen layouts:
+      - Raw WAVEFORMAT(EX/EXTENSIBLE): sample rate at offset 4
+      - Property-blob wrapper + WAVEFORMAT: sample rate at offset 12
+    """
+    import struct
+
+    if not isinstance(blob, (bytes, bytearray)) or len(blob) < 8:
+        return None
+
+    def _try_base(base: int) -> int | None:
+        if len(blob) < base + 8:
+            return None
+        fmt_tag = struct.unpack_from("<H", blob, base)[0]
+        if fmt_tag not in (1, 3, 0xFFFE):
+            return None
+        rate = struct.unpack_from("<I", blob, base + 4)[0]
+        if 8_000 <= rate <= 768_000:
+            return rate
+        return None
+
+    # Prefer wrapped layout first (common in MMDevices property store), then raw layout.
+    return _try_base(8) or _try_base(0)
+
+
 def check_sample_rate() -> CheckResult:
     """A sample rate mismatch between Windows and the game requires real-time
     resampling, adding CPU overhead and potential audio artefacts.
@@ -33,10 +60,8 @@ def check_sample_rate() -> CheckResult:
 
         fmt_key = "{f19f064d-082c-4e27-bc73-6882a1bb8e4c},0"
         blob = _read_device_property(guid, fmt_key)
-        if isinstance(blob, (bytes, bytearray)) and len(blob) >= 28:
-            import struct
-
-            sample_rate = struct.unpack_from("<I", blob, 24)[0]
+        sample_rate = _parse_sample_rate_from_device_format(blob) if blob is not None else None
+        if sample_rate is not None:
             sample_rates.append(sample_rate)
             labels.append(f"{device_name}: {sample_rate} Hz")
             if sample_rate not in (44100, 48000, 96000, 192000):

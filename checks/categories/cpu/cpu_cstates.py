@@ -15,19 +15,25 @@ def check_cpu_cstates() -> CheckResult:
     value = read_power_setting(plan, _PROC_SUBGROUP, _CSTATES_GUID)
     if value is not None:
         if value == 1:
-            return CheckResult("CPU C-States", Status.GOOD, "Disabled (IDLEDISABLE=1)")
+            return CheckResult(
+                "CPU C-States",
+                Status.GOOD,
+                "Windows policy: disabled (IDLEDISABLE=1)",
+            )
         if value == 0:
             return CheckResult(
                 "CPU C-States",
                 Status.INFO,
-                "Enabled (IDLEDISABLE=0, lower idle power usage)",
-                "C-states reduce idle power/heat, but can add wake latency. Disable in BIOS for lowest latency tuning.",
+                "Windows policy: enabled (IDLEDISABLE=0)",
+                "This reflects Windows power-plan policy only; BIOS/UEFI can still force C-states off. "
+                "For lowest latency tuning, disable C-states in BIOS/UEFI.",
             )
         return CheckResult(
             "CPU C-States",
             Status.INFO,
-            f"Policy value {value}",
-            "Check BIOS/UEFI CPU power-management settings for full C-state control.",
+            f"Windows policy value: {value}",
+            "Windows policy is non-standard here. Check BIOS/UEFI CPU power-management "
+            "settings for effective C-state behavior.",
         )
 
     # Legacy setting fallback used by some systems/plans.
@@ -36,23 +42,23 @@ def check_cpu_cstates() -> CheckResult:
         return CheckResult(
             "CPU C-States",
             Status.INFO,
-            "Setting not exposed in active power plan",
-            "Check BIOS for C-state settings (typically under CPU > Power Management).",
+            "Windows policy setting not exposed in active power plan",
+            "Check BIOS/UEFI for C-state settings (typically under CPU > Power Management).",
         )
     if legacy_value == 0:
-        return CheckResult("CPU C-States", Status.GOOD, "Disabled")
+        return CheckResult("CPU C-States", Status.GOOD, "Windows legacy policy: disabled")
     if legacy_value == 1:
         return CheckResult(
             "CPU C-States",
             Status.INFO,
-            "C1 only (some power saving)",
-            "Shallow sleep saves some power. Disable entirely in BIOS for lowest latency.",
+            "Windows legacy policy: C1 only",
+            "This may still be overridden by BIOS/UEFI. Disable entirely in BIOS for lowest latency.",
         )
     return CheckResult(
         "CPU C-States",
         Status.INFO,
-        f"Enabled (legacy value {legacy_value}, lower power usage)",
-        "C-states save power/heat but can introduce latency spikes. Disable in BIOS for competitive gaming.",
+        f"Windows legacy policy: enabled (value {legacy_value})",
+        "This may still be overridden by BIOS/UEFI. Disable C-states in BIOS for competitive gaming.",
     )
 
 

@@ -11,7 +11,7 @@ def check_shader_cache() -> CheckResult:
     if not has_nvidia_adapter and not _is_nvidia():
         return CheckResult(
             "Shader Cache (NVIDIA)",
-            Status.INFO,
+            Status.GOOD,
             "Not applicable (no NVIDIA GPU detected)",
         )
 

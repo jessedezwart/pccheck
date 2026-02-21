@@ -4,6 +4,12 @@ import pkgutil
 from importlib import import_module
 from typing import Callable
 
+_DISABLED_CATEGORIES = frozenset(
+    {
+        "peripherals",
+    }
+)
+
 
 def _discover_category_packages() -> list[tuple[str, str]]:
     categories_package = import_module("checks.categories")
@@ -14,7 +20,9 @@ def _discover_category_packages() -> list[tuple[str, str]]:
             f"checks.categories.{module_info.name}",
         )
         for module_info in pkgutil.iter_modules(categories_package.__path__)
-        if module_info.ispkg and not module_info.name.startswith("_")
+        if module_info.ispkg
+        and not module_info.name.startswith("_")
+        and module_info.name not in _DISABLED_CATEGORIES
     )
 
 

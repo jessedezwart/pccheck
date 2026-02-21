@@ -25,7 +25,9 @@ def check_hags() -> CheckResult:
             Status.INFO,
             "Disabled",
             "Enable in Settings > Display > Graphics > Default graphics settings > "
-            "Hardware-Accelerated GPU Scheduling. Reduces GPU latency on DX12/Vulkan.",
+            "Hardware-Accelerated GPU Scheduling. Reduces GPU latency on DX12/Vulkan. "
+            "Note: on some systems, it may not be possible to disable HAGS while the "
+            "virtualization stack is enabled (e.g., Hyper-V/VBS/Memory Integrity/WSL2).",
         )
     return CheckResult(
         "HAGS (HW-Accelerated GPU Scheduling)",

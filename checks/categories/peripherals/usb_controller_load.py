@@ -21,29 +21,47 @@ def check_usb_controller_load() -> CheckResult:
             "Check USB controllers in Device Manager > Universal Serial Bus controllers.",
         )
 
-    # Count devices per controller via Win32_USBControllerDevice
-    ps_script = """
-$controllers = Get-WmiObject Win32_USBController
-$assoc = Get-WmiObject Win32_USBControllerDevice
-$result = @()
-foreach ($ctrl in $controllers) {
-    $devCount = ($assoc | Where-Object { $_.Antecedent -like "*$($ctrl.DeviceID)*" }).Count
-    $result += "$($ctrl.Name)|$devCount"
-}
-$result -join ";"
-"""
-    ps_out = run_powershell(ps_script)
-    controller_info: list[tuple[str, int]] = []
+    # Count devices per controller via Win32_USBControllerDevice associations.
+    # Parsing in Python is more reliable than wildcard matching escaped DeviceID strings.
+    def _norm_device_id(value: object) -> str | None:
+        if not isinstance(value, str):
+            return None
+        return value.replace("\\\\", "\\").strip().upper()
 
-    if ps_out:
-        for part in ps_out.split(";"):
-            part = part.strip()
-            if "|" in part:
-                name, _, count_str = part.rpartition("|")
-                try:
-                    controller_info.append((name.strip(), int(count_str.strip())))
-                except ValueError:
-                    pass
+    def _extract_assoc_device_id(path_value: object) -> str | None:
+        if not isinstance(path_value, str):
+            return None
+        m = re.search(r'DeviceID="([^"]+)"', path_value, re.IGNORECASE)
+        if not m:
+            return None
+        return _norm_device_id(m.group(1))
+
+    controller_names: dict[str, str] = {}
+    devices_by_controller: dict[str, set[str]] = {}
+    for row in rows:
+        ctrl_id = _norm_device_id(row.get("DeviceID"))
+        ctrl_name = str(row.get("Name") or "?").strip()
+        if not ctrl_id:
+            continue
+        controller_names[ctrl_id] = ctrl_name
+        devices_by_controller.setdefault(ctrl_id, set())
+
+    assoc_rows = wmi_query(
+        "Win32_USBControllerDevice",
+        props=["Antecedent", "Dependent"],
+    )
+    for assoc in assoc_rows:
+        ctrl_id = _extract_assoc_device_id(assoc.get("Antecedent"))
+        dep_id = _extract_assoc_device_id(assoc.get("Dependent"))
+        if not ctrl_id or not dep_id:
+            continue
+        if ctrl_id in devices_by_controller:
+            devices_by_controller[ctrl_id].add(dep_id)
+
+    controller_info = [
+        (controller_names[cid], len(devices_by_controller.get(cid, set())))
+        for cid in controller_names
+    ]
 
     if not controller_info:
         # Fallback: just list controller names
@@ -69,7 +87,6 @@ $result -join ";"
             "on a different controller (check device manager for separate USB root hubs).",
         )
 
-    ", ".join(f"{n[:25]} ({c} dev)" for n, c in controller_info[:3])
     return CheckResult(
         "USB Controller Load",
         Status.GOOD,

@@ -2,7 +2,8 @@
 CPU / System checks:
   - CPU core parking
   - Hyperthreading / SMT
-  - Virtualization Based Security (VBS / HVCI)
+  - Virtualization-Based Security (VBS)
+  - Core Isolation / Memory Integrity (HVCI)
   - Memory channel config (dual vs single)
   - XMP / DOCP enabled
   - CPU C-states

@@ -39,6 +39,9 @@ _VIRTUAL_KEYWORDS = frozenset(
         "isatap",
         "teredo",
         "npcap",
+        "kernel debug network adapter",
+        "ras async adapter",
+        "remote ndis based internet sharing device",
     ]
 )
 
@@ -53,6 +56,18 @@ def _physical_nics() -> list[tuple[str, str]]:
     return [
         (desc, path) for desc, path in find_adapter_subkeys(NIC_CLASS_GUID) if not _is_virtual(desc)
     ]
+
+
+def _nic_name_by_guid(interface_guid: str) -> str | None:
+    """Return NIC display name for a TCP/IP interface GUID, if known."""
+    target = interface_guid.strip("{}").lower()
+    for desc, path in find_adapter_subkeys(NIC_CLASS_GUID):
+        cfg_id = reg_hklm(path, "NetCfgInstanceId")
+        if not isinstance(cfg_id, str):
+            continue
+        if cfg_id.strip("{}").lower() == target:
+            return desc
+    return None
 
 
 def _get_tcpip_interface_guids() -> list[str]:
@@ -92,5 +107,6 @@ __all__ = [
     "_VIRTUAL_KEYWORDS",
     "_is_virtual",
     "_physical_nics",
+    "_nic_name_by_guid",
     "_get_tcpip_interface_guids",
 ]

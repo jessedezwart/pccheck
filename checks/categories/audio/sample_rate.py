@@ -16,12 +16,20 @@ def check_sample_rate() -> CheckResult:
     guids = _enum_audio_render_devices()
     sample_rates: list[int] = []
     mismatched: list[str] = []
+    labels: list[str] = []
 
     for guid in guids:
         state_path = f"{_MMDEVICES_RENDER}\\{guid}"
         state = reg_hklm(state_path, "DeviceState")
         if state != 1:
             continue
+
+        device_name = (
+            reg_hklm(state_path, "FriendlyName")
+            or _read_device_property(guid, "{b3f8fa53-0004-438e-9003-51a46e139bfc},6")
+            or _read_device_property(guid, "{a45c254e-df1c-4efd-8020-67d146a850e0},14")
+            or guid[:8]
+        )
 
         fmt_key = "{f19f064d-082c-4e27-bc73-6882a1bb8e4c},0"
         blob = _read_device_property(guid, fmt_key)
@@ -30,8 +38,9 @@ def check_sample_rate() -> CheckResult:
 
             sample_rate = struct.unpack_from("<I", blob, 24)[0]
             sample_rates.append(sample_rate)
+            labels.append(f"{device_name}: {sample_rate} Hz")
             if sample_rate not in (44100, 48000, 96000, 192000):
-                mismatched.append(f"{guid[:8]}: {sample_rate} Hz (unusual)")
+                mismatched.append(f"{device_name}: {sample_rate} Hz (unusual)")
 
     if mismatched:
         return CheckResult(
@@ -42,7 +51,7 @@ def check_sample_rate() -> CheckResult:
             "Playback device > Properties > Advanced > Default Format.",
         )
     if sample_rates:
-        rates_str = ", ".join(f"{r} Hz" for r in set(sample_rates))
+        rates_str = ", ".join(labels) if labels else ", ".join(f"{r} Hz" for r in set(sample_rates))
         dominant = max(set(sample_rates), key=sample_rates.count)
         if dominant not in (48000, 96000, 192000):
             return CheckResult(

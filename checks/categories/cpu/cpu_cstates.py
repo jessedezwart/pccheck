@@ -20,8 +20,8 @@ def check_cpu_cstates() -> CheckResult:
             return CheckResult(
                 "CPU C-States",
                 Status.INFO,
-                "Enabled (IDLEDISABLE=0)",
-                "Disable in BIOS for lowest latency if you are tuning for competitive gaming.",
+                "Enabled (IDLEDISABLE=0, lower idle power usage)",
+                "C-states reduce idle power/heat, but can add wake latency. Disable in BIOS for lowest latency tuning.",
             )
         return CheckResult(
             "CPU C-States",
@@ -45,14 +45,14 @@ def check_cpu_cstates() -> CheckResult:
         return CheckResult(
             "CPU C-States",
             Status.INFO,
-            "C1 only",
-            "Shallow sleep only. Disable entirely in BIOS for the lowest latency.",
+            "C1 only (some power saving)",
+            "Shallow sleep saves some power. Disable entirely in BIOS for lowest latency.",
         )
     return CheckResult(
         "CPU C-States",
         Status.INFO,
-        f"Enabled (legacy value {legacy_value})",
-        "C-states save power but can introduce latency spikes. Disable in BIOS for competitive gaming.",
+        f"Enabled (legacy value {legacy_value}, lower power usage)",
+        "C-states save power/heat but can introduce latency spikes. Disable in BIOS for competitive gaming.",
     )
 
 

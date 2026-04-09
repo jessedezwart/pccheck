@@ -12,7 +12,9 @@ def check_rebar() -> CheckResult:
         any(token in desc.upper() for token in ("NVIDIA", "GEFORCE", "QUADRO", "RTX", "GTX"))
         for desc, _ in adapters
     )
-    has_amd = any(any(token in desc.upper() for token in ("AMD", "RADEON", "RX")) for desc, _ in adapters)
+    has_amd = any(
+        any(token in desc.upper() for token in ("AMD", "RADEON", "RX")) for desc, _ in adapters
+    )
 
     if has_nvidia:
         for desc, path in adapters:
@@ -52,7 +54,9 @@ def check_rebar() -> CheckResult:
             sam_val = reg_hklm(path, "DalSAMEnabled")
             if sam_val is not None:
                 if int(sam_val) == 1:
-                    return CheckResult("ReBAR / Smart Access Memory", Status.GOOD, "Enabled (AMD SAM)")
+                    return CheckResult(
+                        "ReBAR / Smart Access Memory", Status.GOOD, "Enabled (AMD SAM)"
+                    )
                 return CheckResult(
                     "ReBAR / Smart Access Memory",
                     Status.WARNING,

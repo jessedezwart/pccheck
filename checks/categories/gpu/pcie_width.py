@@ -21,7 +21,7 @@ def _read_pcie_width_from_pnp() -> tuple[str, int, int] | None:
         "-KeyName 'DEVPKEY_PciDevice_CurrentLinkWidth' -ErrorAction SilentlyContinue).Data; "
         "$max = (Get-PnpDeviceProperty -InstanceId $dev.InstanceId "
         "-KeyName 'DEVPKEY_PciDevice_MaxLinkWidth' -ErrorAction SilentlyContinue).Data; "
-        "if ($null -ne $cur -and $null -ne $max) { \"$($dev.FriendlyName)|$cur|$max\" } }"
+        'if ($null -ne $cur -and $null -ne $max) { "$($dev.FriendlyName)|$cur|$max" } }'
     )
     out = run_powershell(ps)
     parts = [p.strip() for p in out.split("|")]

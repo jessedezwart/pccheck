@@ -58,12 +58,16 @@ def _query_write_cache_state(physical_drive_index: int) -> int | None:
     close_handle = kernel32.CloseHandle
 
     path = f"\\\\.\\PhysicalDrive{physical_drive_index}"
-    handle = create_file(path, 0, _FILE_SHARE_READ | _FILE_SHARE_WRITE, None, _OPEN_EXISTING, 0, None)
+    handle = create_file(
+        path, 0, _FILE_SHARE_READ | _FILE_SHARE_WRITE, None, _OPEN_EXISTING, 0, None
+    )
     if handle in (0, _INVALID_HANDLE_VALUE):
         return None
 
     try:
-        query = _STORAGE_PROPERTY_QUERY(_STORAGE_DEVICE_WRITE_CACHE_PROPERTY, _PROPERTY_STANDARD_QUERY)
+        query = _STORAGE_PROPERTY_QUERY(
+            _STORAGE_DEVICE_WRITE_CACHE_PROPERTY, _PROPERTY_STANDARD_QUERY
+        )
         out_buffer = (ctypes.c_ubyte * 64)()
         returned = wintypes.DWORD(0)
 

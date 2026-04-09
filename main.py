@@ -189,3 +189,4 @@ def run_checks() -> None:
 if __name__ == "__main__":
     _elevate_if_needed()
     run_checks()
+    input("\nPress Enter to exit...")

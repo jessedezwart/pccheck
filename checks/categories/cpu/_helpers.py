@@ -21,8 +21,8 @@ import psutil
 
 from checks.base import (
     _CORE_PARKING_GUID,
-    _CSTATES_LEGACY_GUID,
     _CSTATES_GUID,
+    _CSTATES_LEGACY_GUID,
     _MAX_PROC_STATE_GUID,
     _MIN_PROC_STATE_GUID,
     _PROC_SUBGROUP,

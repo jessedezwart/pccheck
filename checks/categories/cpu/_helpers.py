@@ -6,7 +6,6 @@ CPU / System checks:
   - Core Isolation / Memory Integrity (HVCI)
   - Memory channel config (dual vs single)
   - XMP / DOCP enabled
-  - CPU C-states
   - CPU boost / max processor state
 
 To remove a check, delete or comment out its entry in get_checks().
@@ -21,8 +20,6 @@ import psutil
 
 from checks.base import (
     _CORE_PARKING_GUID,
-    _CSTATES_GUID,
-    _CSTATES_LEGACY_GUID,
     _MAX_PROC_STATE_GUID,
     _MIN_PROC_STATE_GUID,
     _PROC_SUBGROUP,
@@ -55,6 +52,4 @@ __all__ = [
     "_CORE_PARKING_GUID",
     "_MIN_PROC_STATE_GUID",
     "_MAX_PROC_STATE_GUID",
-    "_CSTATES_GUID",
-    "_CSTATES_LEGACY_GUID",
 ]

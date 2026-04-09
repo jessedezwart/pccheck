@@ -57,5 +57,8 @@ def check_xmp_docp() -> CheckResult:
     )
 
 
+IMPACT_EXPLANATION = "Likely moderate impact in CPU/memory-limited scenarios: running below rated memory profile can reduce bandwidth and raise latency. Source: https://www.amd.com/en/products/processors/technologies/expo.html"
+
+
 def run_check() -> CheckResult:
     return check_xmp_docp()

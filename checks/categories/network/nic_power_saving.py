@@ -67,5 +67,8 @@ def check_nic_power_saving() -> CheckResult:
     )
 
 
+IMPACT_EXPLANATION = "Likely low-to-moderate impact: NIC power-state transitions can increase latency spikes and jitter in online games. Source: https://learn.microsoft.com/en-us/windows-hardware/drivers/network/ndis-selective-suspend"
+
+
 def run_check() -> CheckResult:
     return check_nic_power_saving()

@@ -44,5 +44,8 @@ def check_cpu_boost() -> CheckResult:
     return CheckResult("CPU Max Processor State", Status.GOOD, value_str)
 
 
+IMPACT_EXPLANATION = "Likely moderate-to-high impact: limiting max processor state can directly reduce peak CPU frequency and gaming consistency. Source: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/static-configuration-options-for-the-performance-state-engine"
+
+
 def run_check() -> CheckResult:
     return check_cpu_boost()

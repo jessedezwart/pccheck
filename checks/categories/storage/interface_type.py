@@ -77,5 +77,8 @@ def check_interface_type() -> CheckResult:
     )
 
 
+IMPACT_EXPLANATION = "Likely low impact on average FPS, but storage interface limits can significantly affect load times and asset-streaming stutter. Source: https://learn.microsoft.com/en-us/windows/win32/wmisdk/wmi-tasks--disks-and-file-systems"
+
+
 def run_check() -> CheckResult:
     return check_interface_type()

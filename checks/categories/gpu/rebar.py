@@ -72,5 +72,8 @@ def check_rebar() -> CheckResult:
     )
 
 
+IMPACT_EXPLANATION = "Likely low-to-moderate, game-dependent impact: Resizable BAR/SAM can improve performance in supported titles and hurt in a few others. Source: https://www.amd.com/en/technologies/smart-access-memory"
+
+
 def run_check() -> CheckResult:
     return check_rebar()

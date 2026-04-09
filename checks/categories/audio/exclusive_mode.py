@@ -62,5 +62,8 @@ def check_exclusive_mode() -> CheckResult:
     )
 
 
+IMPACT_EXPLANATION = "Likely low impact on FPS, but can affect audio latency/clarity and add minor CPU overhead. Source: https://learn.microsoft.com/en-us/windows/win32/coreaudio/exclusive-mode-streams"
+
+
 def run_check() -> CheckResult:
     return check_exclusive_mode()

@@ -27,5 +27,8 @@ def check_hyperthreading() -> CheckResult:
     )
 
 
+IMPACT_EXPLANATION = "Likely moderate, game-dependent impact: SMT/Hyperthreading affects thread scheduling and can improve or sometimes reduce consistency depending on title and CPU. Source: https://en.wikipedia.org/wiki/Simultaneous_multithreading"
+
+
 def run_check() -> CheckResult:
     return check_hyperthreading()

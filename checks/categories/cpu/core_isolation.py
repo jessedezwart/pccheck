@@ -56,5 +56,8 @@ def check_core_isolation_memory_integrity() -> CheckResult:
     )
 
 
+IMPACT_EXPLANATION = "Likely moderate impact in CPU-limited scenarios: HVCI/VBS security features can reduce throughput and frame-time consistency on some systems. Source: https://learn.microsoft.com/en-us/windows/security/hardware-security/enable-virtualization-based-protection-of-code-integrity"
+
+
 def run_check() -> CheckResult:
     return check_core_isolation_memory_integrity()

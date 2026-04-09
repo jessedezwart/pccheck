@@ -94,5 +94,8 @@ def check_usb_controller_load() -> CheckResult:
     )
 
 
+IMPACT_EXPLANATION = "Likely low-to-moderate impact: heavy shared USB bus activity can increase input-device service latency in edge cases. Source: https://learn.microsoft.com/en-us/windows-hardware/drivers/usbcon/usb-bandwidth-allocation"
+
+
 def run_check() -> CheckResult:
     return check_usb_controller_load()

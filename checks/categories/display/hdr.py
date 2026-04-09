@@ -65,5 +65,8 @@ def check_hdr() -> CheckResult:
     return CheckResult("HDR", Status.GOOD, "Disabled")
 
 
+IMPACT_EXPLANATION = "Likely low-to-moderate impact: HDR tone mapping and composition paths can affect latency and consistency depending on game and display pipeline. Source: https://learn.microsoft.com/en-us/windows/win32/direct3darticles/high-dynamic-range"
+
+
 def run_check() -> CheckResult:
     return check_hdr()

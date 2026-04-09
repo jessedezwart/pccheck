@@ -45,5 +45,8 @@ def check_interrupt_moderation() -> CheckResult:
     )
 
 
+IMPACT_EXPLANATION = "Likely low-to-moderate impact: interrupt moderation mainly affects online latency/jitter rather than average FPS. Source: https://learn.microsoft.com/en-us/windows-hardware/drivers/network/interrupt-moderation"
+
+
 def run_check() -> CheckResult:
     return check_interrupt_moderation()

@@ -147,5 +147,8 @@ def check_write_caching() -> CheckResult:
     )
 
 
+IMPACT_EXPLANATION = "Likely low impact on average FPS, but write-cache policy can affect I/O burst behavior and content streaming smoothness. Source: https://learn.microsoft.com/en-us/windows/win32/fileio/file-caching"
+
+
 def run_check() -> CheckResult:
     return check_write_caching()

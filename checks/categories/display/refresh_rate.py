@@ -99,5 +99,8 @@ def check_refresh_rate() -> CheckResult:
     )
 
 
+IMPACT_EXPLANATION = "Likely moderate impact on smoothness and perceived latency when refresh configuration is suboptimal. Source: https://learn.microsoft.com/en-us/windows/win32/direct3ddxgi/variable-refresh-rate-displays"
+
+
 def run_check() -> CheckResult:
     return check_refresh_rate()

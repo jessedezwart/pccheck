@@ -102,5 +102,8 @@ def check_sample_rate() -> CheckResult:
     )
 
 
+IMPACT_EXPLANATION = "Likely low impact on FPS, but sample-rate mismatches can add resampling overhead and increase audio latency risk. Source: https://learn.microsoft.com/en-us/windows/win32/coreaudio/exclusive-mode-streams"
+
+
 def run_check() -> CheckResult:
     return check_sample_rate()

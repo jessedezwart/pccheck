@@ -36,5 +36,8 @@ def check_xbox_game_bar_dvr() -> CheckResult:
     )
 
 
+IMPACT_EXPLANATION = "Likely moderate impact when background recording is enabled: real-time capture uses encoder/GPU resources and can reduce headroom. Source: https://support.xbox.com/en-US/help/games-apps/game-setup-and-play/how-to-record-with-game-bar"
+
+
 def run_check() -> CheckResult:
     return check_xbox_game_bar_dvr()

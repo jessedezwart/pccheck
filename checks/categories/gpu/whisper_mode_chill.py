@@ -56,5 +56,8 @@ def check_whisper_mode_chill() -> CheckResult:
     )
 
 
+IMPACT_EXPLANATION = "Likely moderate impact when enabled: frame caps/power-saving modes can reduce frame rate and alter latency behavior. Source: https://www.nvidia.com/en-us/geforce/guides/system-latency-optimization-guide/"
+
+
 def run_check() -> CheckResult:
     return check_whisper_mode_chill()

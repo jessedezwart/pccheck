@@ -56,5 +56,8 @@ def check_spatial_audio() -> CheckResult:
     )
 
 
+IMPACT_EXPLANATION = "Likely low impact on FPS, but spatial audio can add DSP latency and some CPU overhead. Source: https://learn.microsoft.com/en-us/windows/win32/coreaudio/exclusive-mode-streams"
+
+
 def run_check() -> CheckResult:
     return check_spatial_audio()

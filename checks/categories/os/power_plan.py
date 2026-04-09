@@ -47,5 +47,8 @@ def check_power_plan() -> CheckResult:
     )
 
 
+IMPACT_EXPLANATION = "Likely moderate impact: power-plan processor policy can materially affect boost behavior and consistency in CPU-limited games. Source: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/static-configuration-options-for-the-performance-state-engine"
+
+
 def run_check() -> CheckResult:
     return check_power_plan()

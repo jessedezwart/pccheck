@@ -23,5 +23,8 @@ def check_game_mode() -> CheckResult:
     return CheckResult("Game Mode", Status.GOOD, "Enabled (default)")
 
 
+IMPACT_EXPLANATION = "Likely low-to-moderate impact depending on workload contention: scheduler prioritization can improve consistency when background activity exists. Source: https://learn.microsoft.com/en-us/windows/win32/procthread/multimedia-class-scheduler-service"
+
+
 def run_check() -> CheckResult:
     return check_game_mode()

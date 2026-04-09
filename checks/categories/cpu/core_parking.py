@@ -46,5 +46,8 @@ def check_core_parking() -> CheckResult:
     )
 
 
+IMPACT_EXPLANATION = "Likely moderate-to-high impact on 1% lows: aggressive core parking can increase scheduling latency and frame-time variance. Source: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/static-configuration-options-for-the-performance-state-engine"
+
+
 def run_check() -> CheckResult:
     return check_core_parking()

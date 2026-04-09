@@ -33,5 +33,8 @@ def check_shader_cache() -> CheckResult:
     return CheckResult("Shader Cache (NVIDIA)", Status.GOOD, "Enabled")
 
 
+IMPACT_EXPLANATION = "Likely low-to-moderate impact on stutter: shader cache settings primarily influence compilation hitching and frame-time stability. Source: https://www.nvidia.com/en-us/geforce/guides/system-latency-optimization-guide/"
+
+
 def run_check() -> CheckResult:
     return check_shader_cache()

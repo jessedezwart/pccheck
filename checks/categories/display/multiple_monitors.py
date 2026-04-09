@@ -53,5 +53,8 @@ def check_multiple_monitors() -> CheckResult:
     )
 
 
+IMPACT_EXPLANATION = "Likely low-to-moderate impact: additional active displays increase composition workload and can affect frame-time consistency in edge cases. Source: https://learn.microsoft.com/en-us/windows/win32/w8cookbook/desktop-window-manager-is-always-on"
+
+
 def run_check() -> CheckResult:
     return check_multiple_monitors()

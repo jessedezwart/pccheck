@@ -32,5 +32,8 @@ def check_sysmain() -> CheckResult:
         )
 
 
+IMPACT_EXPLANATION = "Likely low impact on average FPS, but background caching activity can affect storage contention and stutter on some systems. Source: https://learn.microsoft.com/en-us/windows/win32/fileio/file-caching"
+
+
 def run_check() -> CheckResult:
     return check_sysmain()

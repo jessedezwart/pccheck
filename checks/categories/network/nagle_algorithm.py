@@ -55,5 +55,8 @@ def check_nagle_algorithm() -> CheckResult:
     )
 
 
+IMPACT_EXPLANATION = "Likely low-to-moderate impact: Nagle/ACK behavior mainly affects online responsiveness and packet latency, not raw FPS. Source: https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/registry-entry-control-tcp-acknowledgment-behavior"
+
+
 def run_check() -> CheckResult:
     return check_nagle_algorithm()

@@ -49,5 +49,8 @@ def check_timer_resolution() -> CheckResult:
         return CheckResult("Timer Resolution", Status.UNKNOWN, f"Error: {e}")
 
 
+IMPACT_EXPLANATION = "Likely moderate impact on input and frame pacing: timer resolution affects scheduler wake-up granularity and latency behavior. Source: https://learn.microsoft.com/en-us/windows/win32/api/timeapi/nf-timeapi-timebeginperiod"
+
+
 def run_check() -> CheckResult:
     return check_timer_resolution()

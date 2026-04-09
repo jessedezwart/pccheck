@@ -37,5 +37,8 @@ def check_windows_version() -> CheckResult:
     )
 
 
+IMPACT_EXPLANATION = "Likely low-to-moderate impact over time: newer Windows builds frequently include graphics scheduler, driver model, and gaming stack updates. Source: https://learn.microsoft.com/en-us/windows/release-health/windows11-release-information"
+
+
 def run_check() -> CheckResult:
     return check_windows_version()

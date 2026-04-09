@@ -66,5 +66,8 @@ def check_smart_health() -> CheckResult:
     )
 
 
+IMPACT_EXPLANATION = "Likely low direct FPS impact, but degrading drive health can cause stalls, long loads, and severe streaming hitching. Source: https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/win32-diskdrive"
+
+
 def run_check() -> CheckResult:
     return check_smart_health()

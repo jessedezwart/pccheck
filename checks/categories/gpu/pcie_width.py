@@ -86,5 +86,8 @@ def check_pcie_width() -> CheckResult:
     )
 
 
+IMPACT_EXPLANATION = "Likely low-to-moderate impact unless severely constrained: reduced PCIe link width can bottleneck bandwidth in some GPU-heavy workloads. Source: https://en.wikipedia.org/wiki/PCI_Express"
+
+
 def run_check() -> CheckResult:
     return check_pcie_width()

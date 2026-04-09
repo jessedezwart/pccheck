@@ -55,5 +55,8 @@ def check_rss() -> CheckResult:
     )
 
 
+IMPACT_EXPLANATION = "Likely low-to-moderate impact: RSS improves network processing distribution and helps online responsiveness under load. Source: https://learn.microsoft.com/en-us/windows-hardware/drivers/network/introduction-to-receive-side-scaling"
+
+
 def run_check() -> CheckResult:
     return check_rss()

@@ -40,5 +40,8 @@ def check_memory_channels() -> CheckResult:
     )
 
 
+IMPACT_EXPLANATION = "Likely moderate-to-high impact in memory-sensitive games: single-channel memory can limit bandwidth and hurt frame-time consistency. Source: https://en.wikipedia.org/wiki/Multi-channel_memory_architecture"
+
+
 def run_check() -> CheckResult:
     return check_memory_channels()

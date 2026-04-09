@@ -47,5 +47,8 @@ def check_vbs() -> CheckResult:
     return CheckResult("Virtualization-Based Security (VBS)", Status.GOOD, "Disabled")
 
 
+IMPACT_EXPLANATION = "Likely moderate impact in CPU-limited scenarios: VBS/HVCI can add measurable overhead depending on workload and hardware. Source: https://learn.microsoft.com/en-us/windows/security/hardware-security/enable-virtualization-based-protection-of-code-integrity"
+
+
 def run_check() -> CheckResult:
     return check_vbs()

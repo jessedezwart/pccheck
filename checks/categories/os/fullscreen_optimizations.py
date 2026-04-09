@@ -42,5 +42,8 @@ def check_fullscreen_optimizations() -> CheckResult:
     )
 
 
+IMPACT_EXPLANATION = "Likely low-to-moderate, game-dependent impact: presentation/composition mode can influence latency and smoothness. Source: https://learn.microsoft.com/en-us/windows/win32/direct3ddxgi/dxgi-flip-model"
+
+
 def run_check() -> CheckResult:
     return check_fullscreen_optimizations()

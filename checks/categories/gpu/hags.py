@@ -36,5 +36,8 @@ def check_hags() -> CheckResult:
     )
 
 
+IMPACT_EXPLANATION = "Likely moderate, system-dependent impact: GPU scheduling changes can alter latency and frame consistency depending on driver/game stack. Source: https://devblogs.microsoft.com/directx/hardware-accelerated-gpu-scheduling/"
+
+
 def run_check() -> CheckResult:
     return check_hags()

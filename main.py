@@ -24,9 +24,6 @@ if sys.platform != "win32":
     )
     sys.exit(1)
 
-import ctypes
-import os
-
 from rich.console import Console, Group
 from rich.live import Live
 from rich.text import Text
@@ -58,34 +55,6 @@ def _format_tree_result_line(result) -> Text:
 # ---------------------------------------------------------------------------
 
 
-def _is_admin() -> bool:
-    try:
-        return bool(ctypes.windll.shell32.IsUserAnAdmin())
-    except Exception:
-        return False
-
-
-def _elevate_if_needed() -> None:
-    """Re-launch with UAC elevation if not already running as admin.
-    Opens an elevated window and exits the current (non-admin) process.
-    If the user cancels the UAC prompt, execution continues without admin rights.
-    """
-    if _is_admin():
-        return
-    if getattr(sys, "frozen", False):
-        # Running as a frozen EXE — re-launch self with no extra args
-        ret = ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, None, None, 1)
-    else:
-        # Running as a script — pass the script path to the interpreter, no extra args
-        script = os.path.abspath(sys.argv[0])
-        ret = ctypes.windll.shell32.ShellExecuteW(
-            None, "runas", sys.executable, f'"{script}"', None, 1
-        )
-    if ret > 32:  # > 32 means ShellExecute succeeded
-        sys.exit(0)
-    # ret <= 32 means failure (user cancelled UAC, etc.) — fall through unelevated
-
-
 # ---------------------------------------------------------------------------
 # Main run
 # ---------------------------------------------------------------------------
@@ -99,11 +68,6 @@ def run_checks() -> None:
       [green]✓ Good[/green]    [yellow]⚠ Warning[/yellow]    [red]✗ Issue[/red]    [cyan]ℹ Info[/cyan]    [dim]? Unknown[/dim]
     """
     from checks.base import DETAIL_TEXT_STYLE, Status
-
-    if not _is_admin():
-        console.print(
-            "[yellow]⚠  Not running as Administrator — some checks may be incomplete.[/yellow]\n"
-        )
 
     keys = list(CATEGORIES.keys())
 
@@ -187,6 +151,5 @@ def run_checks() -> None:
 # ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    _elevate_if_needed()
     run_checks()
     input("\nPress Enter to exit...")
